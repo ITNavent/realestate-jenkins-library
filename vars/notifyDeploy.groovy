@@ -6,7 +6,7 @@ def call(Map config) {
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	withCredentials([string(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
 		wrap([$class: 'BuildUser']) {
-			def slackMessage = config?.slackMessage ?: "Deploy iniciado por ${BUILD_USER_ID} de ${newrelicAppName} finalizado el ${$BUILD_TIMESTAMP} revision: ${gitRevision} branch: ${gitBranch}"
+			def slackMessage = config?.slackMessage ?: "Deploy iniciado por ${BUILD_USER_ID} de ${newrelicAppName} finalizado el ${BUILD_TIMESTAMP} revision: ${gitRevision} branch: ${gitBranch}"
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
 				def nameResponse = sh(script: 'curl -X GET "https://api.newrelic.com/v2/applications.json" -H "X-Api-Key:${NR_API_KEY}" -i -d "filter[name]=${newrelicAppName}"', returnStdout: true)
