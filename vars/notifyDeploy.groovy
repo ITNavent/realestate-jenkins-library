@@ -14,7 +14,7 @@ def call(Map config) {
 				def newrelicAppId = jsonResponse.applications[0].id
 				sh """
 				curl -X POST -H 'Content-Type: application/json' \
-				-H 'X-Api-Key:${NR_API_KEY}' -i \
+				-H 'X-Api-Key:${NR_API_KEY}' \
 				-d \'{"deployment": { "revision": "${gitRevision}", "user": "${BUILD_USER_ID}" } }\' https://api.newrelic.com/v2/applications/${newrelicAppId}/deployments.json
         		"""
 			}
