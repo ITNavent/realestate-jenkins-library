@@ -1,7 +1,13 @@
-def call(String revision = 'REVISION', String slackChannel = '#deploys-realestate', String newrelicAppName = '') {
+def call(Map config) {
+	def slackColor = config?.slackColor ?: 'good'
+	def slackChannel = config?.slackChannel ?: '#deploys-realestate'
+	def gitRevision = config?.gitRevision ?: 'sin datos'
+	def gitBranch = config?.gitBranch ?: 'sin datos'
+	def newrelicAppName = config?.newrelicAppName ?: ''
+	def slackMessage = config?.slackMessage ?: "Deploy iniciado por ${BUILD_USER_ID} de ${newrelicAppName} finalizado el ${$BUILD_TIMESTAMP} revision: ${gitRevision} branch: ${gitBranch}"
 	withCredentials([file(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
 		wrap([$class: 'BuildUser']) {
-			slackSend(color: 'good', channel: slackChannel, message: 'Deploy de ${newrelicAppName} finalizado en ${$BUILD_TIMESTAMP} revision: ${env.GIT_COMMIT} branch: ${env.GIT_BRANCH})
+			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
 				def nameResponse = sh(script: 'curl -X GET "https://api.newrelic.com/v2/applications.json" -H "X-Api-Key:${NR_API_KEY}" -i -d "filter[name]=${newrelicAppName}"', returnStdout: true)
 				def jsonResponse = readJSON text: "${nameResponse}"
