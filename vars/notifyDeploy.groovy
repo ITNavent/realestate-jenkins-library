@@ -4,7 +4,7 @@ def call(Map config) {
 	def gitRevision = config?.gitRevision ?: 'sin datos'
 	def gitBranch = config?.gitBranch ?: 'sin datos'
 	def newrelicAppName = config?.newrelicAppName ?: ''
-	withCredentials([file(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
+	withCredentials([text(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
 		wrap([$class: 'BuildUser']) {
 			def slackMessage = config?.slackMessage ?: "Deploy iniciado por ${BUILD_USER_ID} de ${newrelicAppName} finalizado el ${$BUILD_TIMESTAMP} revision: ${gitRevision} branch: ${gitBranch}"
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
