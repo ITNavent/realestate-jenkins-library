@@ -10,9 +10,6 @@ def call(Map config) {
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
 				def nameResponse = sh(script: "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:${NR_API_KEY}' -d 'filter[name]=${newrelicAppName}'", returnStdout: true)
-				//echo nameResponse
-				//def slurper = new groovy.json.JsonSlurper()
-				//def jsonResponse = slurper.parseText(nameResponse)
 				def jsonResponse = readJSON text: nameResponse
 				def newrelicAppId = jsonResponse.applications[0].id
 				sh """
