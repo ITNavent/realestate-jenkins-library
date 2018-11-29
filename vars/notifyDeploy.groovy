@@ -11,7 +11,7 @@ def call(Map config) {
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
 				def nameResponse = sh(script: "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:${NR_API_KEY}' -i -d 'filter[name]=${newrelicAppName}'", returnStdout: true)
 				echo nameResponse
-				def jsonResponse = rnew JsonSlurperClassic().parseText(nameResponse)
+				def jsonResponse = rnew JsonSlurper().parseText(nameResponse)
 				//def jsonResponse = readJSON text: nameResponse
 				def newrelicAppId = jsonResponse.applications[0].id
 				sh """
