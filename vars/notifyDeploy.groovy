@@ -10,9 +10,10 @@ def call(Map config) {
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
 				def nameResponse = sh(script: "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:${NR_API_KEY}' -i -d 'filter[name]=${newrelicAppName}'", returnStdout: true)
+				echo nameResponse.applications[0].id
 				echo nameResponse
-				def jsonResponse = readJSON text: nameResponse
-				def newrelicAppId = jsonResponse.applications[0].id
+				//def jsonResponse = readJSON text: nameResponse
+				def newrelicAppId = nameResponse.applications[0].id
 				sh """
 				curl -X POST -H 'Content-Type: application/json' \
 				-H 'X-Api-Key:${NR_API_KEY}' -i \
