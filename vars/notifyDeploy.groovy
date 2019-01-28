@@ -5,9 +5,14 @@ def call(Map config) {
 	def gitBranch = config?.gitBranch ?: 'sin datos'
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	withCredentials([string(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
+		def safeBuildUserId = "unknown"
 		wrap([$class: 'BuildUser']) {
-			def buildUserId = "${BUILD_USER_ID}".equals("")? "remoteJob": "${BUILD_USER_ID}" 
-			def slackMessage = config?.slackMessage ?: "Deploy finalizado de *${newrelicAppName}* el ${BUILD_TIMESTAMP} \nusuario: ${buildUserId} revision: ${gitRevision} branch: ${gitBranch}"
+			try {
+				safeBuildUserId = BUILD_USER_ID
+			 } catch (e) {
+				echo "Build user id not in scope, probably triggered from another job"
+			 } 
+			def slackMessage = config?.slackMessage ?: "Deploy finalizado de *${newrelicAppName}* el ${BUILD_TIMESTAMP} \nusuario: ${safeBuildUserId} revision: ${gitRevision} branch: ${gitBranch}"
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
 				def nameResponse = sh(script: "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:${NR_API_KEY}' -d 'filter[name]=${newrelicAppName}'", returnStdout: true)
@@ -16,7 +21,7 @@ def call(Map config) {
 				sh """
 				curl -X POST -H 'Content-Type: application/json' \
 				-H 'X-Api-Key:${NR_API_KEY}' \
-				-d \'{"deployment": { "revision": "${gitRevision}", "user": "${buildUserId}" } }\' https://api.newrelic.com/v2/applications/${newrelicAppId}/deployments.json
+				-d \'{"deployment": { "revision": "${gitRevision}", "user": "${safeBuildUserId}" } }\' https://api.newrelic.com/v2/applications/${newrelicAppId}/deployments.json
         		"""
 			}
 		}
