@@ -6,7 +6,7 @@ def call(Map config) {
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	withCredentials([string(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
 		wrap([$class: 'BuildUser']) {
-			def buildUserId = sh(script: "echo ${BUILD_USER_ID:-remoteJob}", returnStdout: true)
+			def buildUserId = "${BUILD_USER_ID}".equals("")? "remoteJob": "${BUILD_USER_ID}" 
 			def slackMessage = config?.slackMessage ?: "Deploy finalizado de *${newrelicAppName}* el ${BUILD_TIMESTAMP} \nusuario: ${buildUserId} revision: ${gitRevision} branch: ${gitBranch}"
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicAppName != null && !''.equals(newrelicAppName)) {
