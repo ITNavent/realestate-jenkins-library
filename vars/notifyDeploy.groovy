@@ -18,12 +18,14 @@ def call(Map config) {
 			if(newrelicDeploy) {
 				def nameResponse = sh(script: "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:${NR_API_KEY}' -d 'filter[name]=${newrelicAppName}'", returnStdout: true)
 				def jsonResponse = readJSON text: nameResponse
-				def newrelicAppId = jsonResponse.applications[0].id
-				sh """
-				curl -X POST -H 'Content-Type: application/json' \
-				-H 'X-Api-Key:${NR_API_KEY}' \
-				-d \'{"deployment": { "revision": "${gitRevision}", "user": "${safeBuildUserId}" } }\' https://api.newrelic.com/v2/applications/${newrelicAppId}/deployments.json
-        		"""
+				if(jsonResponse.applications.size > 0) {
+					def newrelicAppId = jsonResponse.applications[0].id
+					sh """
+					curl -X POST -H 'Content-Type: application/json' \
+					-H 'X-Api-Key:${NR_API_KEY}' \
+					-d \'{"deployment": { "revision": "${gitRevision}", "user": "${safeBuildUserId}" } }\' https://api.newrelic.com/v2/applications/${newrelicAppId}/deployments.json
+					"""
+				}
 			}
 		}
 	}
