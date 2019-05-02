@@ -5,7 +5,7 @@ def call(Map config) {
 	def gitBranch = config?.gitBranch ?: 'sin datos'
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	def newrelicDeploy = config?.newrelicDeploy ?: true
-	def kubeCurrentContext = sh("kubectl config current-context", returnStdout: true)
+	def kubeCurrentContext = sh(script: "kubectl config current-context", returnStdout: true)
 	if(kubeCurrentContext != "rcptf-prd") {
 		newrelicDeploy = false
 	}
