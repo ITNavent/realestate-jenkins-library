@@ -5,6 +5,10 @@ def call(Map config) {
 	def gitBranch = config?.gitBranch ?: 'sin datos'
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	def newrelicDeploy = config?.newrelicDeploy ?: true
+	def kubeCurrentContext = sh("kubectl config current-context", returnStdout: true)
+	if(kubeCurrentContext != "rcptf-prd") {
+		newrelicDeploy = false
+	}
 	withCredentials([string(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
 		def safeBuildUserId = "unknown"
 		wrap([$class: 'BuildUser']) {
