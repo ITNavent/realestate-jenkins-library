@@ -6,6 +6,7 @@ def call(Map config) {
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	def newrelicDeploy = config?.newrelicDeploy ?: true
 	def kubeCurrentContext = sh(script: "kubectl config current-context", returnStdout: true)
+	echo "kubeCurrentContext ${kubeCurrentContext}"
 	if(kubeCurrentContext != "rcptf-prd") {
 		newrelicDeploy = false
 	}
