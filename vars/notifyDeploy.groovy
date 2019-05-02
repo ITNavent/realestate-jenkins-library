@@ -7,8 +7,8 @@ def call(Map config) {
 	def newrelicDeploy = config?.newrelicDeploy ?: true
 	def kubeCurrentContext = sh(script: "kubectl config current-context", returnStdout: true)
 	echo "kubeCurrentContext ${kubeCurrentContext} newrelicDeploy ${newrelicDeploy}"
-	if(!kubeCurrentContext.endsWith("prd")) {
-		echo "ends with prd"
+	if(kubeCurrentContext != "gke_rcptf-prd_us-east1_re-plat-prd") {
+		echo "no ends with prd"
 		newrelicDeploy = false
 	}
 	echo "despues kubeCurrentContext ${kubeCurrentContext} newrelicDeploy ${newrelicDeploy}"
