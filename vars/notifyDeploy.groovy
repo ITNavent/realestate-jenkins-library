@@ -6,10 +6,12 @@ def call(Map config) {
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	def newrelicDeploy = config?.newrelicDeploy ?: true
 	def kubeCurrentContext = sh(script: "kubectl config current-context", returnStdout: true)
-	echo "kubeCurrentContext ${kubeCurrentContext}"
+	echo "kubeCurrentContext ${kubeCurrentContext} newrelicDeploy ${newrelicDeploy}"
 	if(!kubeCurrentContext.endsWith("prd")) {
+		echo "ends with prd"
 		newrelicDeploy = false
 	}
+	echo "despues kubeCurrentContext ${kubeCurrentContext} newrelicDeploy ${newrelicDeploy}"
 	withCredentials([string(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
 		def safeBuildUserId = "unknown"
 		wrap([$class: 'BuildUser']) {
