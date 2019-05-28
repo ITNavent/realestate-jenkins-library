@@ -17,7 +17,7 @@ def call(Map config) {
 			 } catch (e) {
 				echo "Build user id not in scope, probably triggered from another job"
 			 } 
-			def slackMessage = config?.slackMessage ?: "Deploy finalizado de *${newrelicAppName}* el ${BUILD_TIMESTAMP} \nusuario: ${safeBuildUserId} revision: ${gitRevision} branch: ${gitBranch}"
+			def slackMessage = config?.slackMessage ?: "Deploy finalizado de *${newrelicAppName}* el ${BUILD_TIMESTAMP} \nusuario: ${safeBuildUserId} revision: ${gitRevision} branch: ${gitBranch} ${BUILD_URL}"
 			slackSend(color: slackColor, channel: slackChannel, message: slackMessage)
 			if(newrelicDeploy) {
 				def nameResponse = sh(script: "curl -X GET 'https://api.newrelic.com/v2/applications.json' -H 'X-Api-Key:${NR_API_KEY}' -d 'filter[name]=${newrelicAppName}'", returnStdout: true)
