@@ -25,7 +25,7 @@ def call(String statefulsetName, String vsName, String namespace, String cluster
         for(route in VS_ROUTES) {
             VS_DESC += " " + route.destination.subset + ":" + route.weight.toString()
         }
-        COLOR_DESC = "Replicas blue: ${BLUE_REPLICAS}\n Replicas green: ${GREEN_REPLICAS}\n Virtual service: ${VS_DESC}"
+        COLOR_DESC = "Replicas blue: ${BLUE_REPLICAS}<br/> Replicas green: ${GREEN_REPLICAS}\n Virtual service: ${VS_DESC}"
 	}
 	timeout(time: 60, unit: 'SECONDS') {
 		script {
