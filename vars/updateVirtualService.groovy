@@ -7,7 +7,7 @@ def call(String releaseName, String namespace, String colour, String chartLocati
 	script {
 		if(colour != 'blue' || colour != 'green') {
 			currentBuild.result = 'ABORTED'
-			error("${colour} no es un color de deploy valido, debe ser uno de ['blue', 'green']")
+			error("'${colour}' no es un color de deploy valido, debe ser uno de ['blue', 'green']")
 		}
 		VS_MAP[colour] = 100
 	}
