@@ -12,10 +12,10 @@ def call(String statefulsetName, String vsName, String namespace, String cluster
 	}
 	script {
 		try {
-            BLUE_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-blue -n ${namespace} -o jsonpath={.status.currentReplicas}")
+            BLUE_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-blue -n ${namespace} -o jsonpath={.status.replicas}")
         } catch(err) {}
         try {
-            GREEN_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-green -n ${namespace} -o jsonpath={.status.currentReplicas}")
+            GREEN_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-green -n ${namespace} -o jsonpath={.status.replicas}")
         } catch(err) {}
         def VS_JSON = sh(returnStdout: true, script: "kubectl get virtualservice ${vsName} -n ${namespace} -o json")
         def VS_PROPS = readJSON text: VS_JSON
