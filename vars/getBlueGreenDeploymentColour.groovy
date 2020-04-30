@@ -12,18 +12,18 @@ def call(String statefulsetName, String vsName, String namespace, String cluster
 	}
 	script {
 		try {
-            BLUE_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-blue -n ${namespace} -o jsonpath={.status.replicas}")
+            BLUE_REPLICAS = (sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-blue -n ${namespace} -o jsonpath={.status.replicas}")).toInteger()
         } catch(err) {}
         try {
-            GREEN_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-green -n ${namespace} -o jsonpath={.status.replicas}")
+            GREEN_REPLICAS = (sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-green -n ${namespace} -o jsonpath={.status.replicas}")).toInteger()
         } catch(err) {}
         def VS_JSON = sh(returnStdout: true, script: "kubectl get virtualservice ${vsName} -n ${namespace} -o json")
         def VS_PROPS = readJSON text: VS_JSON
         def VS_ROUTES = VS_PROPS.spec.http[0].route
         for(route in VS_ROUTES) {
-            VS_MAP[route.destination.subset] = route.weight ?: 0
+            VS_MAP[route.destination.subset] = (route.weight ?: 0).toInteger()
         }
-		echo VS_MAP.toString()
+		echo "virtual service map ${VS_MAP.toString()}" 
 	}
 	script {
 		ansiColor('xterm') {
