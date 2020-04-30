@@ -5,7 +5,7 @@ def call(String releaseName, String namespace, String colour, String chartLocati
 	def VS_MAP = ['blue': 0,
 		'green': 0]
 	script {
-		if(colour != "blue" || colour != "green") {
+		if(colour != "blue" && colour != "green") {
 			currentBuild.result = 'ABORTED'
 			error("'${colour}' no es un color de deploy valido, debe ser uno de ['blue', 'green']")
 		}
