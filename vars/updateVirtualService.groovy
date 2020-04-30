@@ -1,4 +1,4 @@
-def call(String releaseName, String namespace, String colour, String chartLocation = './deploy/istio') {
+def call(String releaseName, String namespace, String colour, String chartLocation = './deploy/istio', String extraValues = "") {
 	def BLUE_REPLICAS = 0
 	def GREEN_REPLICAS = 0
 	def COLOR_PARAM = ""
@@ -13,7 +13,7 @@ def call(String releaseName, String namespace, String colour, String chartLocati
 		echo VS_MAP.toString()
 	}
 	sh """
-		helm upgrade --install ${releaseName}-istio ${chartLocation} --reuse-values \
+		helm upgrade --install ${releaseName}-istio ${chartLocation} ${extraValues} \
 		--namespace ${namespace} --set istio.blueWeight=${VS_MAP["blue"]} \
 		--set istio.greenWeight=${VS_MAP["green"]} --set istio.blueGreen=true --atomic
 	"""
