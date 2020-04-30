@@ -10,7 +10,7 @@ def call(String releaseName, String namespace, String colour, String chartLocati
 			error("'${colour}' no es un color de deploy valido, debe ser uno de ['blue', 'green']")
 		}
 		VS_MAP[colour] = 100
-		echo VS_MAP
+		echo VS_MAP.toString()
 	}
 	sh """
 		helm upgrade --install ${releaseName}-istio ${chartLocation} --reuse-values \

@@ -23,7 +23,7 @@ def call(String statefulsetName, String vsName, String namespace, String cluster
         for(route in VS_ROUTES) {
             VS_MAP[route.destination.subset] = route.weight ?: 0
         }
-		echo VS_MAP
+		echo VS_MAP.toString()
 	}
 	script {
 		ansiColor('xterm') {
