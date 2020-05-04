@@ -4,12 +4,6 @@ def call(String statefulsetName, String vsName, String namespace, String cluster
 	def COLOR_PARAM = ""
 	def VS_MAP = ["blue": 0,
 		"green": 0]
-	withCredentials([file(credentialsId: "jenkins-${projectName}", variable: 'CHECK_PULL_KEYFILE')]) {
-		sh """
-		gcloud auth activate-service-account --key-file=${CHECK_PULL_KEYFILE} --project ${projectName}
-		gcloud container clusters get-credentials ${clusterName} --zone us-east1
-		"""
-	}
 	script {
 		try {
             BLUE_REPLICAS = (sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-blue -n ${namespace} -o jsonpath={.status.replicas}")).toInteger()
