@@ -1,4 +1,4 @@
-def call(String statefulsetName, String releaseName, String namespace, String gitProjectName, String chartLocation = './deploy/istio', String extraValues = "") {
+def call(String statefulsetName, String releaseName, String namespace) {
 	def DOWN_COLOR = ""
 	def UP_COLOR = ""
 	def DOWN_REPLICAS = 0
