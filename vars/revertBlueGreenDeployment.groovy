@@ -1,4 +1,4 @@
-def call(String statefulsetName, String releaseName, String vsName, String namespace) {
+def call(String statefulsetName, String releaseName, String vsName, String namespace, String gitProject, String chartLocation) {
 	def DOWN_COLOR = ""
 	script {
 		def UP_COLOR = getBlueGreenDeploymentColour(statefulsetName, vsName, namespace)
@@ -11,11 +11,22 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 			error("'${UP_COLOR}' no es un color de deploy valido, debe ser uno de ['blue', 'green']")
 		}
 		//Copio la cantidad de replicas actuales
-		def DOWN_REPLICAS = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-${UP_COLOR} -n ${namespace} -o jsonpath={.status.replicas}")
+		def DOWN_JSON = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-${UP_COLOR} -n ${namespace} -o json")
+		def DOWN_PROPS = readJSON text: DOWN_JSON
+		def DOWN_REPLICAS = DOWN_PROPS.status.replicas
+		def DOWN_TAG_NAME= DOWN_PROPS.metadata.labels['app.kubernetes.io/version']
+		checkout([
+			$class: 'GitSCM',
+			branches: [[name: 'refs/tags/${DOWN_TAG_NAME}']],
+			doGenerateSubmoduleConfigurations: false,
+			extensions: [],
+			submoduleCfg: [],
+			userRemoteConfigs: [[credentialsId: 'e9943f17-aaf0-4838-bb08-f747e259c0e9', url: 'git@github.com:ITNavent/${gitProject}.git']]
+		])
 		sh """
 		kubectl scale --replicas=${DOWN_REPLICAS} statefulset/${statefulsetName}-${UP_COLOR} -n ${namespace}
 		kubectl wait-sts ${statefulsetName}-${UP_COLOR} -n ${namespace}
 		"""
-		updateVirtualServiceReuseValues(statefulsetName, releaseName, namespace, UP_COLOR)
+		updateVirtualServiceReuseValues(statefulsetName, releaseName, namespace, UP_COLOR, chartLocation)
 	}
 }

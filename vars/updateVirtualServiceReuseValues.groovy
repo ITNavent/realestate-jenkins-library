@@ -1,4 +1,4 @@
-def call(String statefulsetName, String releaseName, String namespace, String colour) {
+def call(String statefulsetName, String releaseName, String namespace, String colour, String chartLocation = './deploy/istio') {
 	def DOWN_COLOR = ""
 	def VS_MAP = ["blue": 0, "green": 0]
 	script {
@@ -16,7 +16,7 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 		echo VS_MAP.toString()
 	}
 	sh """
-		helm upgrade --install ${releaseName}-istio --namespace ${namespace} \
+		helm upgrade --install ${releaseName}-istio ${chartLocation}--namespace ${namespace} \
 		--reuse-values --set istio.blueWeight=${VS_MAP["blue"]} \
 		--set istio.greenWeight=${VS_MAP["green"]} --set istio.blueGreen=true --atomic
 		kubectl scale --replicas=0 statefulset/${statefulsetName}-${DOWN_COLOR} -n ${namespace}
