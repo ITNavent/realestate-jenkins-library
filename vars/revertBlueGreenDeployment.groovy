@@ -18,7 +18,7 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 		echo "DOWN_TAG_NAME ${DOWN_TAG_NAME}"
 		checkout([
 			$class: 'GitSCM',
-			branches: [[name: 'refs/tags/${DOWN_TAG_NAME}']],
+			branches: [[name: "refs/tags/${DOWN_TAG_NAME}"]],
 			userRemoteConfigs: [[credentialsId: 'e9943f17-aaf0-4838-bb08-f747e259c0e9', url: "git@github.com:ITNavent/${gitProject}.git"]]
 		])
 		sh """
