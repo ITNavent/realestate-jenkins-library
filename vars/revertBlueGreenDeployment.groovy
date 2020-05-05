@@ -11,7 +11,7 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 			error("'${UP_COLOR}' no es un color de deploy valido, debe ser uno de ['blue', 'green']")
 		}
 		//Copio la cantidad de replicas actuales
-		def DOWN_JSON = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-${UP_COLOR} -n ${namespace} -o json")
+		def DOWN_JSON = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-${DOWN_COLOR} -n ${namespace} -o json")
 		def DOWN_PROPS = readJSON text: DOWN_JSON
 		def DOWN_REPLICAS = DOWN_PROPS.status.replicas
 		def DOWN_TAG_NAME = DOWN_PROPS.metadata.labels['app.kubernetes.io/version']
