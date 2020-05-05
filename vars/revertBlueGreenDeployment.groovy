@@ -22,7 +22,7 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 			extensions: [[
 				$class: 'SparseCheckoutPaths',
 				sparseCheckoutPaths: [[path: "${chartLocation}/*"]]
-			]]
+			]],
 			userRemoteConfigs: [[
 				credentialsId: 'e9943f17-aaf0-4838-bb08-f747e259c0e9', 
 				url: "git@github.com:ITNavent/${gitProject}.git"
