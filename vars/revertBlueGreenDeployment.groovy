@@ -19,8 +19,9 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 		checkout([
 			$class: 'GitSCM',
 			branches: [[name: "refs/tags/${DOWN_TAG_NAME}"]],
-			extensions: [[
-				$class: 'SparseCheckoutPaths',
+			extensions: [
+				[$class: 'CleanBeforeCheckout'],
+				[$class: 'SparseCheckoutPaths',
 				sparseCheckoutPaths: [[path: "${chartLocation}/*"]]
 			]],
 			userRemoteConfigs: [[
