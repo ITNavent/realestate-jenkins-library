@@ -18,6 +18,6 @@ def call(String statefulsetName, String releaseName, String namespace) {
 		kubectl scale --replicas=${DOWN_REPLICAS} statefulset/${statefulsetName}-${UP_COLOR} -n ${namespace}
 		kubectl wait-sts ${statefulsetName}-${UP_COLOR} -n ${namespace}
 		"""
-		updateVirtualServiceReuseValues(statefulsetName, releaseName, namespace, UP_COLOR))
+		updateVirtualServiceReuseValues(statefulsetName, releaseName, namespace, UP_COLOR)
 	}
 }
