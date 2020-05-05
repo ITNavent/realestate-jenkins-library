@@ -14,7 +14,8 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 		def DOWN_JSON = sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-${UP_COLOR} -n ${namespace} -o json")
 		def DOWN_PROPS = readJSON text: DOWN_JSON
 		def DOWN_REPLICAS = DOWN_PROPS.status.replicas
-		def DOWN_TAG_NAME= DOWN_PROPS.metadata.labels['app.kubernetes.io/version']
+		def DOWN_TAG_NAME = DOWN_PROPS.metadata.labels['app.kubernetes.io/version']
+		echo "DOWN_TAG_NAME ${DOWN_TAG_NAME}"
 		checkout([
 			$class: 'GitSCM',
 			branches: [[name: 'refs/tags/${DOWN_TAG_NAME}']],
