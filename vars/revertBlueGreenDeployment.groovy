@@ -1,9 +1,7 @@
 def call(String statefulsetName, String releaseName, String namespace) {
 	def DOWN_COLOR = ""
-	def UP_COLOR = ""
-	def DOWN_REPLICAS = 0
 	script {
-		UP_COLOR = getBlueGreenDeploymentColour(statefulsetName, releaseName, namespace)
+		def UP_COLOR = getBlueGreenDeploymentColour(statefulsetName, releaseName, namespace)
 		if(UP_COLOR == "blue") {
 			DOWN_COLOR = "green"
 		} else if(UP_COLOR == "green") {
