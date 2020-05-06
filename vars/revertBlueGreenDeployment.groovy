@@ -1,4 +1,4 @@
-def call(String statefulsetName, String releaseName, String vsName, String namespace, String gitProject, String chartLocation) {
+def call(String statefulsetName, String releaseName, String vsName, String namespace, String gitProject, String chartLocation, String credentialsId) {
 	def DOWN_COLOR = ""
 	script {
 		def UP_COLOR = getBlueGreenDeploymentColour(statefulsetName, vsName, namespace)
@@ -23,7 +23,7 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 				[$class: 'CleanBeforeCheckout']
 			]],
 			userRemoteConfigs: [[
-				credentialsId: 'e9943f17-aaf0-4838-bb08-f747e259c0e9', 
+				credentialsId: credentialsId, 
 				url: "git@github.com:ITNavent/${gitProject}.git"
 			]]
 		])

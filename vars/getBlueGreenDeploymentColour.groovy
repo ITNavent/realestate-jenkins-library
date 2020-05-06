@@ -11,12 +11,17 @@ def call(String statefulsetName, String vsName, String namespace) {
         try {
             GREEN_REPLICAS = (sh(returnStdout: true, script: "kubectl get statefulset ${statefulsetName}-green -n ${namespace} -o jsonpath={.status.replicas}")).toInteger()
         } catch(err) {}
-        def VS_JSON = sh(returnStdout: true, script: "kubectl get virtualservice ${vsName} -n ${namespace} -o json")
-        def VS_PROPS = readJSON text: VS_JSON
-        def VS_ROUTES = VS_PROPS.spec.http[0].route
-        for(route in VS_ROUTES) {
-            VS_MAP[route.destination.subset] = (route.weight ?: 0).toInteger()
-        }
+		try {
+			def VS_JSON = sh(returnStdout: true, script: "kubectl get virtualservice ${vsName} -n ${namespace} -o json")
+			def VS_PROPS = readJSON text: VS_JSON
+			def VS_ROUTES = VS_PROPS.spec.http[0].route
+			for(route in VS_ROUTES) {
+				VS_MAP[route.destination.subset] = (route.weight ?: 0).toInteger()
+			}
+		} catch(err) {
+			// no existe deploy de istio, arranco como de cero.
+			VS_MAP = ["blue"] = 100
+		}
 		echo "virtual service map ${VS_MAP.toString()}" 
 	}
 	script {
