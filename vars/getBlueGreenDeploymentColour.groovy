@@ -20,7 +20,7 @@ def call(String statefulsetName, String vsName, String namespace) {
 			}
 		} catch(err) {
 			// no existe deploy de istio, arranco como de cero.
-			VS_MAP = ["blue"] = 100
+			VS_MAP["blue"] = 100
 		}
 		echo "virtual service map ${VS_MAP.toString()}" 
 	}
