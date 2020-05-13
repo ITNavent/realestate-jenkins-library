@@ -21,7 +21,7 @@ def call(String statefulsetName, String releaseName, String vsName, String names
 			branches: [[name: "refs/tags/${DOWN_TAG_NAME}"]],
 			extensions: [
 				[$class: 'CleanBeforeCheckout']
-			]],
+			],
 			userRemoteConfigs: [[
 				credentialsId: credentialsId, 
 				url: "git@github.com:ITNavent/${gitProject}.git"
