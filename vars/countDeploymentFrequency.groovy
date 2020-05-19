@@ -1,7 +1,7 @@
 def call() {
 	script {
 		def fields = [:]
-		fields['change_sucess'] = 1
+		fields['change_success'] = 1
 		echo "fields " + fields.toString()
 		def tags = [:]
 		tags['job_name']      = env.JOB_NAME
