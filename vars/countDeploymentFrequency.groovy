@@ -3,7 +3,7 @@ def call(String slackChannel = '#deploys-realestate') {
 		withCredentials([string(credentialsId: 'deploy_helper_token', variable: 'SLACK_TOKEN')]) {
 			script {
 				def fields = [:]
-				fields['change_success'] = "1"
+				fields['change_success'] = ""
 				echo "fields " + fields.toString()
 				def tags = [:]
 				tags['job_name']      = env.JOB_NAME
