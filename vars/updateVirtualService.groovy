@@ -15,10 +15,14 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 		}
 		echo VS_MAP.toString()
 	}
-	sh """
+	retry(3) {
+		sh """
 		helm upgrade --install ${releaseName}-istio ${chartLocation} ${extraValues} \
 		--namespace ${namespace} --set istio.blueWeight=${VS_MAP["blue"]} \
 		--set istio.greenWeight=${VS_MAP["green"]} --set istio.blueGreen=true --atomic
-		kubectl scale --replicas=0 statefulset/${statefulsetName}-${DOWN_COLOR} -n ${namespace}
-	"""
+		"""
+		try {
+			(sh(script: "kubectl scale --replicas=0 statefulset/${statefulsetName}-${DOWN_COLOR} -n ${namespace}"))
+		} catch(err) {}
+	}
 }
