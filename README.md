@@ -2,9 +2,10 @@
 
 ## Deployment frequency
 
-* Agregar en jenkins este repositorio como libreria en Global Pipeline Libraries con el boton Add
+- [ ] Agregar en jenkins este repositorio como libreria en Global Pipeline Libraries con el boton Add
+
 Campo | Valor
--------------
+------|---------
 Name | realestate-jenkins-library
 Default version | master
 Load implicitly | tick
@@ -16,11 +17,11 @@ Repository URL | git@github.com:ITNavent/realestate-jenkins-library.git
 Credentials | corerealestate
 Branches to build | */master
 
-* En jenkins instalar el plugin https://plugins.jenkins.io/influxdb/
-* Configurar el InfluxDB Targets
+- [ ] En jenkins instalar el plugin https://plugins.jenkins.io/influxdb/
+- [ ] Configurar el InfluxDB Targets
 
 Campo | Valor
----------------
+------|---------
 Description | influxdb-redeoall
 URL | http://influxdb-all.core.re.navent.biz:8086/
 Username | admin
@@ -29,7 +30,7 @@ Retention Policy | autogen
 Job scheduled time as timestamp | tick
 Expose Exceptions | tick
 
-* En el job de jenkins productivo agregar al final:
+- [ ] En el job de jenkins productivo agregar al final:
 
 ```groovy
 post {
