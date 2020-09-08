@@ -10,6 +10,9 @@ def call(String slackChannel = '#deploys-realestate') {
 				tags['build_number']  = env.BUILD_NUMBER
 				tags['git_commit']    = env.GIT_COMMIT ?: ""
 				tags['git_branch']    = env.GIT_BRANCH ?: ""
+				wrap([$class: 'BuildUser']) {
+					tags['build_user'] = env.BUILD_USER_ID
+				}
 				echo "tags " + tags.toString();
 				influxDbPublisher(customData: fields, customDataTags: tags, selectedTarget: 'influxdb-redeoall', measurementName: 'deploy')
 				cfrDeployHelper(env.JOB_NAME, env.GIT_BRANCH, slackChannel, "${SLACK_TOKEN}")
