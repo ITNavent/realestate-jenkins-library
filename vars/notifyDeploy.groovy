@@ -6,7 +6,7 @@ def call(Map config) {
 	def newrelicAppName = config?.newrelicAppName ?: ''
 	def newrelicDeploy = config?.newrelicDeploy ?: true
 	def kubeCurrentContext = sh(script: "kubectl config current-context", returnStdout: true).trim()
-	if(!kubeCurrentContext.endsWith("prd")) {
+	if(!kubeCurrentContext.endsWith("prd") && !kubeCurrentContext.endsWith("pro")) {
 		newrelicDeploy = false
 	}
 	withCredentials([string(credentialsId: 'newrelic_api_key', variable: 'NR_API_KEY')]) {
