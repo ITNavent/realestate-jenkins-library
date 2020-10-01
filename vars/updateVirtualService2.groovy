@@ -27,12 +27,12 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 			def ISTIO_YAML = sh(returnStdout: true, script: "helm get manifest ${releaseName}-istio -n ${namespace}")
 			def ISTIO_ENTITIES = readYaml text: ISTIO_YAML
 			for(istio_entity in ISTIO_ENTITIES) {
-				if(istio_entity.kind == 'VirtualService') {
-					VS_NAME = istio_entity.metadata.name
+				if(istio_entity.kind == "VirtualService") {
+					vsName = istio_entity.metadata.name
 				}
 			}
 		} catch(err) {
-			error("No se encontro el nombre del VirtualService para comprobar su estado luego del update en release ${releaseName}-istio")
+			error("No se encontro el nombre del VirtualService en release ${releaseName}-istio")
 		}
 		try {
 			def VS_JSON = sh(returnStdout: true, script: "kubectl get virtualservice ${vsName} -n ${namespace} -o json")
@@ -43,6 +43,7 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 			}
 		} catch(err) {
 		}
+		echo "virtual service map en kubernetes ${CURR_VS_MAP.toString()}"
 		if(CURR_VS_MAP[colour] != VS_MAP[colour]) {
 			currentBuild.result = 'ABORTED'
 			error("En release ${releaseName}-istio el peso del ${colour} en Virtual Service ${vsName} deberia ser ser ${VS_MAP[colour]} y es ${CURR_VS_MAP[colour]}")
