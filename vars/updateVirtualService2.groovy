@@ -24,7 +24,7 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 		--set istio.greenWeight=${VS_MAP["green"]} --set istio.blueGreen=true --atomic
 		"""
 		try {
-			def ISTIO_YAML = sh(returnStdout: true, script: "kubectl get manifest ${releaseName}-istio -n ${namespace}")
+			def ISTIO_YAML = sh(returnStdout: true, script: "helm get manifest ${releaseName}-istio -n ${namespace}")
 			def ISTIO_ENTITIES = readYaml text: ISTIO_YAML
 			for(istio_entity in ISTIO_ENTITIES) {
 				if(istio_entity.kind == 'VirtualService') {
