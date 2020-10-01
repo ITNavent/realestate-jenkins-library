@@ -43,12 +43,12 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 			}
 		} catch(err) {
 		}
+		echo "virtual service map esperado ${VS_MAP.toString()}"
 		echo "virtual service map en kubernetes ${CURR_VS_MAP.toString()}"
 		if(CURR_VS_MAP[colour] != VS_MAP[colour]) {
 			currentBuild.result = 'ABORTED'
 			error("En release ${releaseName}-istio el peso del ${colour} en Virtual Service ${vsName} deberia ser ser ${VS_MAP[colour]} y es ${CURR_VS_MAP[colour]}")
 		}
-		echo "virtual service map ${VS_MAP.toString()}"
 		try {
 			(sh(script: "kubectl scale --replicas=0 statefulset/${statefulsetName}-${DOWN_COLOR} -n ${namespace}"))
 		} catch(err) {}
