@@ -31,6 +31,7 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 					vsName = istio_entity.metadata.name
 				}
 			}
+			ISTIO_ENTITIES = null
 		} catch(err) {
 			error("No se encontro el nombre del VirtualService en release ${releaseName}-istio")
 		}
@@ -41,6 +42,7 @@ def call(String statefulsetName, String releaseName, String namespace, String co
 			for(route in VS_ROUTES) {
 				CURR_VS_MAP[route.destination.subset] = (route.weight ?: 0).toInteger()
 			}
+			VS_ROUTES = null
 		} catch(err) {
 		}
 		echo "virtual service map esperado ${VS_MAP.toString()}"
