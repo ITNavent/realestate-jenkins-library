@@ -1,4 +1,4 @@
-def call(String statefulsetName, String vsName, String namespace) {
+def call(String vsName, String namespace) {
 	def BLUE_REPLICAS = 0
 	def GREEN_REPLICAS = 0
 	def COLOR_PARAM = ""
