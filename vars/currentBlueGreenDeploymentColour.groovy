@@ -1,9 +1,6 @@
 def call(String vsName, String namespace) {
-	def BLUE_REPLICAS = 0
-	def GREEN_REPLICAS = 0
 	def COLOR_PARAM = ""
-	def VS_MAP = ["blue": 0,
-		"green": 0, "red": 0]
+	def VS_MAP = ["blue": 0, "green": 0]
 	script {
 		try {
 			def VS_JSON = sh(returnStdout: true, script: "kubectl get virtualservice ${vsName} -n ${namespace} -o json")
@@ -20,8 +17,6 @@ def call(String vsName, String namespace) {
 	}
 	script {
 		ansiColor('xterm') {
-            echo "\033[44m Blue replicas ${BLUE_REPLICAS} Blue virtual service ${VS_MAP['blue']} pct \033[0m"
-            echo "\033[42m Green replicas ${GREEN_REPLICAS} Green virtual service ${VS_MAP['green']} pct \033[0m"
             if(VS_MAP["blue"] == 100 && VS_MAP["green"] == 0) {
                 COLOR_PARAM = 'blue'
             } else if(VS_MAP["blue"] == 0 && VS_MAP["green"] == 100) {
